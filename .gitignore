@@ -1,1 +1,8 @@
-__pycache__
+## Whitelist ignore all
+*
+
+## But not
+!*.ipynb
+!*.py
+!mynn/*.py
+!Lenna.png
