@@ -1,5 +1,6 @@
 ## Whitelist ignore all
-*
+/*.*
+__pycache__
 
 ## But not
 !*.ipynb
