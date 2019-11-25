@@ -30,7 +30,7 @@ class CrossEntropy(LossFunc):
     def f(t,y):
         #return -np.sum(np.dot(t, np.log(y.T)) + np.dot(1 - t, np.log(1 - y.T))) / t.shape[0]
         #return -np.sum(xlogy(t, y) + xlog1py(1 - t, -y)) / t.shape[0]
-        return -np.sum(np.sum(np.xlog1py(t, y)), axis=1)) / t.shape[1] #multy class
+        return -np.sum(np.xlog1py(t, y)) / t.shape[0] #multy class
     
     def d(t,y):
         return (t - y)
