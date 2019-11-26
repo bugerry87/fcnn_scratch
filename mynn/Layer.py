@@ -55,7 +55,7 @@ class Layer:
             The activation potential
         '''
         def z():
-            return self.feed(self.x, self.w) + self.b
+            return self.feed.f(self.x, self.w) + self.b
         
         for self.x in self.input():
             if self.act.monotonic():

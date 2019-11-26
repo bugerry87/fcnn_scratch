@@ -19,29 +19,27 @@ class SumOfSquaresError(LossFunc):
 class RootMeanSquareError(LossFunc):
     '''Root Mean Square error'''
     def f(t, y):
-        return np.power(SOS.f(t, y) / t.shape[0], 0.5)
+        return np.power(SOS.f(t, y) / t.shape[-1], 0.5)
     
     def d(t, y):
-        return (t - y)
+        return SOS.d(t, y) / t.shape[-1]
 
 
 class CrossEntropy(LossFunc):
     '''Cross Entropy'''
     def f(t,y):
-        #return -np.sum(np.dot(t, np.log(y.T)) + np.dot(1 - t, np.log(1 - y.T))) / t.shape[0]
-        #return -np.sum(xlogy(t, y) + xlog1py(1 - t, -y)) / t.shape[0]
-        return -np.sum(np.xlog1py(t, y)) / t.shape[0] #multy class
+        return 1-np.sum(xlog1py(t, y)) / t.shape[-1]
     
     def d(t,y):
-        return (t - y)
+        return (t - y) / t.shape[-1]
 
 
 class ArgMaxPooling(LossFunc):
     '''Arg Max Pooling'''
     def f(t,y):
-        return np.sum(np.argmax(t, axis=1) != np.argmax(y, axis=1)) / t.shape[0]
+        return np.sum(np.argmax(t, axis=1) != np.argmax(y, axis=1))
     
     def d(t,y):
         z = np.zeros(y.shape)
         z[:,np.argmax(y, axis=1)[0]] = 1
-        return (t - z) / t.shape[1]
+        return (t - z) / t.shape[-1]

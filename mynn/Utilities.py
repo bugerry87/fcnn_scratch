@@ -1,20 +1,23 @@
 import pickle
+from .Layer import Layer
+from .NeuralNetwork import NeuralNetwork
 
-
-def dump(nn, model):
+def dump(nn, model=None):
     '''Dumps the params of a given NeuralNetwork into a dictionary.
     
-    The dictionary must have the attribute name of the layer as a key.
-    E.g.: nn.layer1 --> model['layer1']
+    E.g.: nn.layer1 --> model['layer1'] = nn.layer1
     
     Agrs:
         nn: The NeuralNetwork
-        model: A dict where the params get stored at
+        model: Optional output parameter
     '''
-    for k,v in model.items():
-        layer = getattr(nn, k)
-        model[k] = (layer.w.copy(), 0 if layer.b is 0 else layer.b.copy())
-    pass
+    if not model:
+        model = {}
+    
+    for k,v in nn.__dict__.items():
+        if isinstance(v, Layer):
+            model[k] = (v.w.copy(), 0 if v.b is 0 else v.b.copy())
+    return model
 
 
 def assign(model, nn):
@@ -43,9 +46,12 @@ def save(model, fname):
     E.g.: model['layer1'] = (nn.layer1.w, nn.layer1.b)
     
     Args:
-        model: A dict with the parameters.
+        model: A NeuralNetwork or dict with the parameters.
         fname: The path/file name to be stored at.
     '''
+    if isinstance(model, NeuralNetwork):
+        model = dump(model)
+    
     with open(fname, 'wb') as file:
         pickle.dump(model, file)
     pass
@@ -67,5 +73,4 @@ def load(nn, fname):
             layer = getattr(nn, k)
             layer.w = v[0]
             layer.b = v[1]
-    dump(nn, nn.model)
     pass
