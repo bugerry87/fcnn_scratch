@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pylab as plt
+from .Utilities import *
 
 
-def train_epochs(nn, lr, lr_dec):
+def train_epoch(nn, lr, lr_dec):
     '''Trains a NeuralNetword without any visualizations.
     
     Args:
@@ -10,28 +11,26 @@ def train_epochs(nn, lr, lr_dec):
         lr: The learning-rate applied onto the gradient update.
         lr_dec: Decay of the learning-rate per epoch.
     '''
-    epoch = 0
     cost = 0
+    loss = 0
     
     for Z in nn.train(nn.Out, lr, lr_dec):
-        cost += Z / train.shape[0]
-        if nn.epoch > epoch:
-            loss = 0
-            epoch = nn.epoch
-            
-            for Zv in nn.val(nn.Out):
-                loss += Zv / val.shape[0]
+        cost += Z
+        pass
+    
+    for Zv in nn.val(nn.Out):
+        loss += Zv
+        pass
                 
-            yield loss, cost, epoch
-            cost = 0
-    pass
+    return loss, cost
 
 
-def train_n_plot(nn, lr, lr_dec, checkpoint=None, every=None):
+def train_n_plot(nn, epochs, lr, lr_dec, checkpoint=None, every=None):
     '''Trains a NeuralNetwork and plots the learning-curves.
     
     Args:
         nn: The Neural Network to be trained.
+        epochs: Number of epochs. How many times to iterate the entire dataset.
         lr: The learning-rate applied onto the gradient update.
         lr_dec: Decay of the learning-rate per epoch.
         checkpoint: A file/path name prefix where the checkpoints to be stored at.
@@ -48,13 +47,17 @@ def train_n_plot(nn, lr, lr_dec, checkpoint=None, every=None):
     validation = []
     best_loss = None
     best_epoch = 0
+    past = nn.step
     
     if not hasattr(nn, 'model'):
         nn.model = {}
     
-    for loss, cost, epoch in train_epochs(nn, lr, lr_dec):
-        training.append(cost)
-        validation.append(loss)
+    for epoch in range(epochs):
+        loss, cost = train_epoch(nn, lr, lr_dec)
+        N = nn.step - past
+        training.append(cost/N)
+        validation.append(loss/N)
+        past = nn.step
         if best_loss is None or loss <= best_loss:
             best_loss = loss
             best_epoch = epoch
@@ -66,12 +69,12 @@ def train_n_plot(nn, lr, lr_dec, checkpoint=None, every=None):
             save(nn.model, '{}_{}.pkl'.format(checkpoint, epoch))
     
     ax_l = plt.figure().subplots(1)
-    ax_l.plot(range(nn.epoch), training, label='train')
+    ax_l.plot(range(epochs), training, label='train')
     ax_l.set_xlabel("Epoch")
     ax_l.set_ylabel("Cost")
 
     ax_r = ax_l.twinx()
-    ax_r.plot(range(nn.epoch), validation, 'g:', label='val')
+    ax_r.plot(range(epochs), validation, 'g:', label='val')
     ax_r.scatter(best_epoch, best_loss, color='g', marker='D', zorder=3, label='best')
     ax_r.set_ylabel("Loss")
 

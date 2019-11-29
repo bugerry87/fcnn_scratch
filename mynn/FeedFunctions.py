@@ -11,5 +11,8 @@ class InnerProduct(FeedFunc):
     def dw(x, dZ):
         return np.dot(x.T, dZ)
     
-    def dz(dZ, w):
+    def dy(dZ, w):
         return np.dot(dZ, w.T)
+    
+    def db(dZ):
+        return dZ.sum(axis=0)

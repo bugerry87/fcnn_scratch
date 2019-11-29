@@ -15,6 +15,7 @@ class NeuralNetwork:
         self.cost = cost_func
         self.loss = loss_func
         self.training = False
+        self.step = 0
         pass
     
     def train(self, output_layer, lr, lr_dec):
@@ -69,9 +70,10 @@ class NeuralNetwork:
             X: A sample either from train_set or val_set.
         '''
         if self.training:
-            for self.X, self.T, self.epoch, self.step in self.train_set():
+            for self.X, self.T, self.trail in self.train_set():
+                self.step += self.trail
                 yield self.X
         else:
-            for self.X, self.T, _, _ in self.val_set():
+            for self.X, self.T, _ in self.val_set():
                 yield self.X
         pass

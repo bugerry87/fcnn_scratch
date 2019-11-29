@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.special import xlogy, xlog1py
+from scipy.special import xlogy
 
 
 class LossFunc:
@@ -28,7 +28,7 @@ class RootMeanSquareError(LossFunc):
 class CrossEntropy(LossFunc):
     '''Cross Entropy'''
     def f(t,y):
-        return 1-np.sum(xlog1py(t, y)) / t.shape[-1]
+        return -np.sum(xlogy(t, y))
     
     def d(t,y):
         return (t - y) / t.shape[-1]

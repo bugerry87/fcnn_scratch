@@ -75,13 +75,13 @@ class Layer:
             dZ: The gradient computed by NeuralNetwork.train
             lr: The current learning-rate
         '''
-        dZ = self.act.d(self.y if self.act.monotonic else self.z) *dZ #dz+1/dy * dy/dz
+        dZ = self.act.d(self.y if self.act.monotonic else self.z) * dZ#dz+1/dy * dy/dz
         dw = self.feed.dw(self.x, dZ) #dz/dw
         if self.backprop:
-            self.backprop(self.feed.dz(dZ, self.w), lr) #dz/dy-1 = W * dz
+            self.backprop(self.feed.dy(dZ, self.w), lr) #dz/dy-1 = W * dz
         self.w += dw * lr
         if not self.b is 0:
-            self.b += np.sum(dZ, axis=0) * lr
+            self.b += self.feed.db(dZ) * lr
         pass
 
 
