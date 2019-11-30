@@ -3,7 +3,7 @@ import numpy as np
 
 class ActFunc:
     '''A typedef for Activation Functions'''
-    def monotonic():
+    def monotonic(self=None):
         '''Activation functions are usually monotonic.
         
         Otherwise, override this function with False.
@@ -20,10 +20,13 @@ class ActFunc:
 
 
 class Sigmoid(ActFunc):
-    def f(z):
-        return 1 / (1 + np.exp(-z))
+    def __init__(self, relax):
+        self.r = relax
+
+    def f(self, z):
+        return 1 / (1 + np.exp(-z / self.r))
     
-    def d(S):
+    def d(self, S):
         '''Derivative of Sigmoid
         
         Sigmoid is monotonic,

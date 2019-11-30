@@ -15,6 +15,9 @@ def train_epoch(nn, lr, lr_dec):
     loss = 0
     
     for Z in nn.train(nn.Out, lr, lr_dec):
+        assert not Z is 0, "Zero loss at step: {}".format(nn.step)
+        assert not np.isnan(Z), "NaN loss at step: {}".format(nn.step)
+        assert not np.isinf(Z), "Infinite loss at step: {}".format(nn.step)
         cost += Z
         pass
     
@@ -54,9 +57,9 @@ def train_n_plot(nn, epochs, lr, lr_dec, checkpoint=None, every=None):
     
     for epoch in range(epochs):
         loss, cost = train_epoch(nn, lr, lr_dec)
-        N = nn.step - past
-        training.append(cost/N)
-        validation.append(loss/N)
+        #loss /= nn.step - past
+        training.append(cost)
+        validation.append(loss)
         past = nn.step
         if best_loss is None or loss <= best_loss:
             best_loss = loss

@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.special import xlogy
+from scipy.special import xlogy, xlog1py
 
 
 class LossFunc:
@@ -28,7 +28,7 @@ class RootMeanSquareError(LossFunc):
 class CrossEntropy(LossFunc):
     '''Cross Entropy'''
     def f(t,y):
-        return -np.sum(xlogy(t, y))
+        return -np.sum(xlogy(t, y) + xlog1py(1 - t, -y)) / t.shape[-1]
     
     def d(t,y):
         return (t - y) / t.shape[-1]
@@ -37,7 +37,7 @@ class CrossEntropy(LossFunc):
 class ArgMaxPooling(LossFunc):
     '''Arg Max Pooling'''
     def f(t,y):
-        return np.sum(np.argmax(t, axis=1) != np.argmax(y, axis=1))
+        return np.sum(np.argmax(t, axis=-1) != np.argmax(y, axis=-1))
     
     def d(t,y):
         z = np.zeros(y.shape)
