@@ -70,10 +70,10 @@ class NeuralNetwork:
             X: A sample either from train_set or val_set.
         '''
         if self.training:
-            for self.X, self.T, self.trail in self.train_set():
-                self.step += self.trail
+            for self.X, self.T, trail, self.total in self.train_set():
+                self.step += trail
                 yield self.X
         else:
-            for self.X, self.T, _ in self.val_set():
+            for self.X, self.T, _, self.total in self.val_set():
                 yield self.X
         pass
