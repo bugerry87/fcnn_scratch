@@ -76,9 +76,9 @@ class Layer:
             lr: The current learning-rate
         '''
         dZ *= self.act.d(self.y if self.act.monotonic else self.z) #dz+1/dy * dy/dz
+        self.w += self.feed.dw(self.x, dZ) * lr
         if self.backprop:
             self.backprop(self.feed.dy(dZ, self.w), lr) #dz/dy-1 = W * dz
-        self.w += self.feed.dw(self.x, dZ) * lr
         if not self.b is 0:
             self.b += self.feed.db(dZ) * lr
         pass

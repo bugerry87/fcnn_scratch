@@ -7,3 +7,4 @@ __pycache__
 !*.py
 !mynn/*.py
 !Lenna.png
+!kitty.jpg
