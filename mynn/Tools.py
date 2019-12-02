@@ -63,10 +63,12 @@ def train_n_plot(nn, epochs, lr, lr_dec, checkpoint=None, every=None):
             best_epoch = epoch
             dump(nn, nn.model)
         if checkpoint:
-            save(nn.model, '{}_best.pkl'.format(checkpoint))
+            save(nn, '{}_best.pkl'.format(checkpoint))
         if checkpoint and every and not epoch % every:
-            dump(nn, nn.model)
-            save(nn.model, '{}_{}.pkl'.format(checkpoint, epoch))
+            save(nn, '{}_{}.pkl'.format(checkpoint, epoch))
+    
+    if checkpoint:
+        save(nn, '{}_final.pkl'.format(checkpoint))
     
     ax_l = plt.figure().subplots(1)
     ax_l.plot(range(epochs), training, label='train')

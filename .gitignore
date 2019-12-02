@@ -8,3 +8,5 @@ __pycache__
 !mynn/*.py
 !Lenna.png
 !kitty.jpg
+!*best.pkl
+!*final.pkl
