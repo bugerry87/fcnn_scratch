@@ -10,7 +10,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from keras import models
 from keras.models import Sequential
-from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D
+from keras.datasets import cifar10
+from keras.preprocessing.image import ImageDataGenerator
+from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D, Activation
 from keras.callbacks import LambdaCallback
 from utils import *
 
@@ -20,7 +22,7 @@ class Event:
     pass
 
 ## Load dataset from build in MNIST data loader
-(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
 
 ## Check the data
 def close_on_key(event):

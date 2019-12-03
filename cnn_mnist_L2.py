@@ -12,6 +12,7 @@ from keras import models
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D
 from keras.callbacks import LambdaCallback
+from keras import regularizers
 from utils import *
 
 class Event:
@@ -59,14 +60,24 @@ print('Number of images in x_test', x_test.shape[0])
 
 ## Creating a Sequential Model and adding the layers
 model = Sequential()
-model.add(Conv2D(14, kernel_size=(3,3), input_shape=(28, 28, 1)))
+model.add(Conv2D(14,
+    kernel_size=(3,3),
+    input_shape=(28, 28, 1),
+    kernel_regularizer=regularizers.l2(0.01)))
 model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Conv2D(14, kernel_size=(3,3), input_shape=(13, 13, 1)))
+model.add(Conv2D(14,
+    kernel_size=(3,3),
+    input_shape=(13, 13, 1),
+    kernel_regularizer=regularizers.l2(0.01)))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Flatten())
-model.add(Dense(128, activation=tf.nn.relu))
+model.add(Dense(128,
+    activation=tf.nn.relu,
+    kernel_regularizer=regularizers.l2(0.01)))
 model.add(Dropout(0.2))
-model.add(Dense(10,activation=tf.nn.softmax))
+model.add(Dense(10,
+    activation=tf.nn.softmax,
+    kernel_regularizer=regularizers.l2(0.01)))
 model.summary()
 
 ## Create an evaluation callback for integrating the test routine
