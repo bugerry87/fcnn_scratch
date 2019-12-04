@@ -51,7 +51,6 @@ x_test = x_test.astype('float32') / 255
 ## Crop out a validation set
 x_train, x_val = np.split(x_train, (55000,))
 y_train, y_val = np.split(y_train, (55000,))
-print(y_train.shape)
 
 print('x_train shape:', x_train.shape)
 print('Number of images in x_train', x_train.shape[0])

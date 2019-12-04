@@ -14,10 +14,10 @@ from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D
 from keras.callbacks import LambdaCallback
 from utils import *
 
-class Event:
-    def __init__(self, key):
-        self.key = key
-    pass
+
+
+
+
 
 ## Load dataset from build in MNIST data loader
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
@@ -49,7 +49,6 @@ x_test = x_test.astype('float32') / 255
 ## Crop out a validation set
 x_train, x_val = np.split(x_train, (55000,))
 y_train, y_val = np.split(y_train, (55000,))
-print(y_train.shape)
 
 print('x_train shape:', x_train.shape)
 print('Number of images in x_train', x_train.shape[0])
@@ -75,6 +74,7 @@ def run_eval(epoch, logs):
     eval = model.evaluate(x_test, y_test)
     logs['test_loss'] = eval[0]
     logs['test_acc'] = eval[1]
+    print('Test loss:', eval[0], 'Test accuracy:', eval[1])
 
 ## Convert to tensorflow graph
 model.compile(
@@ -95,6 +95,12 @@ history = model.fit(
             )
         ]
     )
+
+
+
+
+
+
 
 ## Plot the Losses
 fig, ax_l = plt.subplots(1)
@@ -135,6 +141,11 @@ plt.tight_layout()
 plt.show()
 
 ## Qualitative examples:
+class Event:
+    def __init__(self, key):
+        self.key = key
+    pass
+
 def sample_handler(event):
     if event.key is 'escape':
         plt.close()
