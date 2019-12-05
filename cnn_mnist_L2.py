@@ -210,11 +210,12 @@ plt.show()
 layer_names = [layer.name for layer in model.layers[:4]]
 print(layer_names)
 layer_iter = iter(layer_names)
+sample = 0
 name = None
 
 def act_pot_handler(event):
     global name
-    sample = 0
+    global sample
     if event.key is 'escape':
         plt.close()
         return
@@ -225,8 +226,8 @@ def act_pot_handler(event):
             print("No more layers!")
             plt.close()
             return
-    elif event.key is 'N':
-        sample = np.random.randint(x_test.shape[0])
+    elif event.key is 'n':
+        sample += 1
         
     layer_output = model.get_layer(name).output
     act_model = models.Model(inputs=model.input, outputs=layer_output)

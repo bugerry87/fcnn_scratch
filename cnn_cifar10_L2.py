@@ -8,6 +8,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 from keras.callbacks import EarlyStopping, LambdaCallback
+from keras import regularizers
 
 
 
@@ -16,7 +17,7 @@ from keras.callbacks import EarlyStopping, LambdaCallback
 # Hyper parameters
 batch_size = 32
 num_classes = 10
-epochs = 20
+epochs = 100
 data_augmentation = True
 num_predictions = 20
 model_name = 'cnn_cifar10.h5'
@@ -57,6 +58,7 @@ x_test /= 255
 x_tensor = (1, x_train.shape[1], x_train.shape[2], x_train.shape[3])
 
 
+
 # Load or Configure model
 load_model = input("Load a pretrained model? (filename or keep blank):")
 if load_model:
@@ -69,9 +71,11 @@ else:
     model.add(
         Conv2D(32, (3, 3),
         padding='same',
-        input_shape=x_train.shape[1:]))
+        input_shape=x_train.shape[1:]
+        ))
     model.add(Activation('relu'))
-    model.add(Conv2D(32, (3, 3)))
+    model.add(Conv2D(32, (3, 3)
+    ))
     model.add(Activation('relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
@@ -87,7 +91,9 @@ else:
     model.add(Dense(512))
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(num_classes))
+    model.add(Dense(num_classes,
+        kernel_regularizer=regularizers.l2(0.001)
+    ))
     model.add(Activation('softmax'))
     
     # Compile the model with Adam optimizer
@@ -252,7 +258,7 @@ def act_pot_handler(event):
             plt.close()
             return
     elif event.key is 'n':
-        sample = np.random.randint(x_test.shape[0])
+        sample += 1
         
     layer_output = model.get_layer(name).output
     act_model = models.Model(inputs=model.input, outputs=layer_output)
