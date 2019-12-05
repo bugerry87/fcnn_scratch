@@ -25,26 +25,6 @@ model_name = 'cnn_cifar10.h5'
 (x_train, y_train), (x_test, y_test) = cifar10.load_data()
 labels = ['Airplane', 'Automobile', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck']
 
-print("what?")
-
-# Convert class vectors to binary class matrices.
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
-# 24bit colors to 32bit float colors
-x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
-x_train /= 255
-x_test /= 255
-x_tensor = (1, x_train.shape[1], x_train.shape[2], x_train.shape[3])
-
-## Crop out a validation set
-x_train, x_val = np.split(x_train, (45000,))
-y_train, y_val = np.split(y_train, (45000,))
-
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_val.shape[0], 'val samples')
-print(x_test.shape[0], 'test samples')
 
 ## Check the data
 def close_on_key(event):
@@ -64,6 +44,26 @@ print("Close the window to continue!")
 #plt.tight_layout()
 plt.show()
 
+
+# Convert class vectors to binary class matrices.
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+
+# 24bit colors to 32bit float colors
+x_train = x_train.astype(float) / 255
+x_test = x_test.astype(float) / 255
+x_tensor = (1, x_train.shape[1], x_train.shape[2], x_train.shape[3])
+
+## Crop out a validation set
+x_train, x_val = np.split(x_train, (45000,))
+y_train, y_val = np.split(y_train, (45000,))
+
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_val.shape[0], 'val samples')
+print(x_test.shape[0], 'test samples')
+
+
 # Load or Configure model
 load_model = input("Load a pretrained model? (filename or keep blank):")
 if load_model:
@@ -81,14 +81,21 @@ else:
     model.add(Conv2D(32, (3, 3)))
     model.add(Activation('relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+    #model.add(Dropout(0.25))
 
     model.add(Conv2D(64, (3, 3), padding='same'))
     model.add(Activation('relu'))
     model.add(Conv2D(64, (3, 3)))
     model.add(Activation('relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+    #model.add(Dropout(0.25))
+    
+    model.add(Conv2D(64, (3, 3), padding='same'))
+    model.add(Activation('relu'))
+    model.add(Conv2D(64, (3, 3)))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    #model.add(Dropout(0.25))
 
     model.add(Flatten())
     model.add(Dense(512))
