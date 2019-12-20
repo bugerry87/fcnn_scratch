@@ -1,12 +1,15 @@
 ## Whitelist ignore all
 /*.*
 __pycache__
+data/*
+models/*
+doc/
 
 ## But not
 !*.ipynb
 !*.py
 !mynn/*.py
-!Lenna.png
-!kitty.jpg
-!*best.pkl
-!*final.pkl
+!data/Lenna.png
+!data/kitty.jpg
+!models/*best.pkl
+!models/*final.pkl
